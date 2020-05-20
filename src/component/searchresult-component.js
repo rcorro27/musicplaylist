@@ -1,9 +1,10 @@
 import React from 'react'
 
-const SearchResult = ({ options }) => (
+const SearchResult = ({ info1, key }) => (
 
     <div>
-        <h2>{options.artists[0].name} </h2>
+        {options.map((option, index) => <li key={index}>{option}</li>)}
+
     </div>
 )
 // {Object.keys(options).map((option, index) => <li value={option} key={index}>{option}</li>)}

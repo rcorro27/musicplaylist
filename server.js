@@ -1,20 +1,50 @@
+'use strict'
 
-const dao = require('.')
-const assert = require('assert').strict
-dao.connect()
+const express = require('express')
 
-dao.query('SELECT * FROM nodepg', [], (result) => {
-    assert.strictEqual(result.command, 'SELECT')
+const app = express()
+app.use(express.static('dist'))
+
+// CORS for development
+// https://enable-cors.org/server_expressjs.html
+app.use(function (req, res, next) {
+    res.header('Access-Control-Allow-Origin', '*')
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
+    next()
 })
 
-// dao.query('SELECT count(*) AS total FROM nodepg', [], (countResult) => {
-//     const total = parseInt(countResult.rows[0].total)
+const PORT = 8080
+const HTTP_OK = 200
+const CONTENT_TYPE_JSON = 'application/json'
 
-//     dao.query('INSERT INTO nodepg (stringField, numberField, booleanField) VALUES ($1, $2, $3)', ['chaîne de caractères 5', 669, false], function () {
-//         dao.query('SELECT * FROM nodepg', [], (result) => {
-//             assert.strictEqual(result.rowCount, total + 1)
+const USERS = [
+    {
+        userName: 'mvachon'
+    },
+    {
+        userName: 'patate'
+    },
+    {
+        userName: 'gcote'
+    },
+    {
+        userName: 'fmartineau'
+    },
+    {
+        userName: 'mstpierre'
+    },
+    {
+        userName: 'msimard'
+    },
+    {
+        userName: 'agermain'
+    }
+]
 
-//             dao.disconnect()
-//         })
-//     })
-// })
+app.get('/index', function (request, response) {
+    response.writeHead(HTTP_OK, { 'Content-Type': CONTENT_TYPE_JSON })
+})
+
+app.listen(PORT, function () {
+    console.log('Server listening on: http://localhost:%s', PORT)
+})

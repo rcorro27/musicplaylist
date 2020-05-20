@@ -29,12 +29,18 @@ class MusicContainer extends Component {
                     autoplay: 1
                 }
 
-            }
+            },
+            test: '',
+            infoVideos: ''
+
         }
         //  this.handleSubmit = this.handleSubmit.bind(this)
         this.handleClick = this.handleClick.bind(this)
+        this.handleClickAlbum = this.handleClickAlbum.bind(this)
         this.handleChange = this.handleChange.bind(this)
         this.retourState = this.retourState.bind(this)
+        this.retourStateVideos = this.retourStateVideos.bind(this)
+
         this.parcoursResultsInfo = this.parcoursResultsInfo.bind(this)
     }
 
@@ -42,40 +48,65 @@ class MusicContainer extends Component {
         this.setState({ query: event.target.value })
     }
 
+    handleClickAlbum (id, img) {
+        const albumId = id
+        const albumImg = img
+
+        const Discogs = require('disconnect').Client
+        const discogs = new Discogs({ userToken: this.state.usertoken }).database()
+        discogs.getMaster(id)
+            .then((infos) => {
+                console.log(infos)
+                /*  let arrayInfosVideos = 0
+                arrayInfosVideos = infos.videos.map((info, index) => [info.title, info.uri, albumImg])
+                console.log('array apres parcourir :', arrayInfosVideos)
+                this.retourStateVideos(arrayInfosVideos) */
+            })
+
+        alert(albumId)
+        alert(albumImg)
+    }
+
+    retourStateVideos (params) {
+        this.setState({ infoVideos: params })
+    }
+
     retourState (params) {
         this.setState({ results: params })
     }
 
-    parcoursResultsInfo () {
-        if (this.state.results !== '') {
-            return <option value={this.state.results.title} key={10}>{this.state.results}</option>
-            // console.log('test', this.state.results[0])
-            // return <YouTube videoId='-yHm_ChrTG0' opts={this.state.options} onReady={this.handleOnReady} />
-            // this.state.results.map((info, index) => {
-            // <SearchResult options={info} key={index} />
-            // })
-        }
-    }
-
     handleClick () {
         alert('query : ' + this.state.query)
-        const results = []
+        // const results = []
         const query = this.state.query
         const Discogs = require('disconnect').Client
 
         const discogs = new Discogs({ userToken: this.state.usertoken }).database()
         discogs.search(query, { type: 'master', per_page: 50 }, (err, datas) => {
+            let testArray = 0
             if (datas) {
-                console.log(' data :', datas)
-                datas.results.map((data) => discogs.getMaster(data.id)
+                // console.log(' data :', datas)
+                testArray = datas.results.map((info, index) => [info.title, info.id, info.thumb])
+                // console.log(' test array :', testArray)
+                //  this.retourState(datas)
+                /* datas.results.map((data) => discogs.getMaster(data.id)
                     .then(infos => {
                         results.push(infos)
-                    }))
-                this.retourState(results)
+                    })) */
+                // this.retourState(results)
             } else {
                 throw new Error('Oups somenthing happend please reload the page', err)
             }
+            this.retourState(testArray)
         })
+    }
+
+    parcoursResultsInfo () {
+        let list = ''
+        if (this.state.results !== '') {
+            list = this.state.results.map((info, index) => <li key={index} value={info[1]} onClick={() => this.handleClickAlbum(info[1], info[2])}><p>{info[0]}</p><p>{info[1]}</p><img src={info[2]} /></li>)
+        }
+        return list
     }
 
     /* handleOnReady (event) {
@@ -86,7 +117,11 @@ class MusicContainer extends Component {
 
     render () {
         // console.log('Query : ', this.state.query)
+        // console.log('test', this.state.test)
+
         console.log('results apres requete', this.state.results)
+        console.log('test array ', this.state.test)
+        console.log('info videos ', this.state.infoVideos)
 
         return (
 
@@ -97,13 +132,17 @@ class MusicContainer extends Component {
                     <SearchInput type='search' placeholder='search' className='form-control mr-sm-2' btnClass='btn btn-outline-success my-2 my-sm-0' btnType='submit' onClick={this.handleClick} formClass='form-inline my-2 my-lg-0' onChange={this.handleChange} />
 
                 </nav>
-                {this.parcoursResultsInfo()}
+                <div>
+                    <h2>infos:</h2>
+                    <ul>
+                        {this.parcoursResultsInfo()}
+                    </ul>
+                </div>
                 <div className='col form-group'>
                     <label htmlFor='country_id'>id</label>
-                    <select className='custom-select' id='country_id' onChange={this.handleCountriesOnChange}>
-                        {this.parcoursResultsInfo()}
-                    </select>
+                    <select className='custom-select' id='country_id' onChange={this.handleCountriesOnChange} />
                 </div>
+
                 <form>
                     <div className='row'>
                         <div className='col form-group' />
