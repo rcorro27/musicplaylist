@@ -6,6 +6,7 @@ const SearchInput = ({ type, placeholder, className, btnClass, btnType, onSubmit
     <div>
         <input className={className} type={type} placeholder={placeholder} onChange={onChange} />
         <button className={btnClass} type={btnType} onClick={onClick}>Search</button>
+
     </div>
 )
 

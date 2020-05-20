@@ -17,31 +17,7 @@ const PORT = 8080
 const HTTP_OK = 200
 const CONTENT_TYPE_JSON = 'application/json'
 
-const USERS = [
-    {
-        userName: 'mvachon'
-    },
-    {
-        userName: 'patate'
-    },
-    {
-        userName: 'gcote'
-    },
-    {
-        userName: 'fmartineau'
-    },
-    {
-        userName: 'mstpierre'
-    },
-    {
-        userName: 'msimard'
-    },
-    {
-        userName: 'agermain'
-    }
-]
-
-app.get('/index', function (request, response) {
+app.get('/paylist', function (request, response) {
     response.writeHead(HTTP_OK, { 'Content-Type': CONTENT_TYPE_JSON })
 })
 
