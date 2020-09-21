@@ -28,7 +28,8 @@ class MusicContainer extends Component {
 
             },
             test: '',
-            infoVideos: ''
+            infoVideos: '',
+            testInfoServeur: ''
 
         }
         //  this.handleSubmit = this.handleSubmit.bind(this)
@@ -41,6 +42,16 @@ class MusicContainer extends Component {
 
         this.parcoursResultsInfo = this.parcoursResultsInfo.bind(this)
         this.showAlbumInfo = this.showAlbumInfo.bind(this)
+    }
+
+    componentDidMount () {
+        fetch('http://localhost:8080/', { method: 'GET' })
+
+            .then(res => res.json()) // convert to plain text
+            .then(res => console.log(res)) /* .then(response => response.json())
+            .then(response => {
+                this.setState({ testInfoServeur: response })
+            }) */
     }
 
     handleChange (event) {
@@ -120,6 +131,7 @@ class MusicContainer extends Component {
 
     render () {
         console.log(this.state.infoVideos)
+        console.log('information qui provient du fetch', this.state.testInfoServeur)
         return (
 
             <div className='container'>
